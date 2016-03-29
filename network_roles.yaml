@@ -1,0 +1,34 @@
+# Unique network role name
+- id: "detach_haproxy/vip"
+  # Role mapping to network
+  default_mapping: "management"
+  properties:
+    # Should be true if network role requires subnet being set
+    subnet: true
+    # Should be true if network role requires gateway being set
+    gateway: false
+    # List of VIPs to be allocated
+    vip:
+       - name: "haproxy"
+         namespace: "haproxy"
+         alias: "haproxy"
+         node_roles:
+           - "primary-standalone-haproxy"
+           - "standalone-haproxy"
+- id: "detach_haproxy_public/vip"
+  # Role mapping to network
+  default_mapping: "public"
+  properties:
+    # Should be true if network role requires subnet being set
+    subnet: true
+    # Should be true if network role requires gateway being set
+    gateway: false
+    # List of VIPs to be allocated
+    vip:
+       - name: "haproxy_public"
+         namespace: "haproxy"
+         alias: "haproxy_public"
+         node_roles:
+           - "primary-standalone-haproxy"
+           - "standalone-haproxy"
+
