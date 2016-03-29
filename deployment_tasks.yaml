@@ -1,0 +1,96 @@
+- id: primary-standalone-haproxy
+  type: group
+  role: [primary-standalone-haproxy]
+  requires: [deploy_start]
+  required_for: [deploy_end, standalone-haproxy, primary-controller]
+  parameters:
+    strategy:
+      type: parallel
+  tasks:
+    - hiera
+    - fuel_pkgs
+    - globals
+    - tools
+    - logging
+    - netconfig
+    - hosts
+    - primary-cluster
+    - virtual_ips
+    - cluster-haproxy
+    - openstack-haproxy-ceilometer
+    - openstack-haproxy-nova
+    - openstack-haproxy-sahara
+    - openstack-haproxy-glance
+    - openstack-haproxy-heat
+    - openstack-haproxy-cinder
+    - openstack-haproxy-keystone
+    - openstack-haproxy-murano
+    - openstack-haproxy-horizon
+    - openstack-haproxy-stats
+    - openstack-haproxy-ironic
+    - openstack-haproxy-radosgw
+    - openstack-haproxy-swift
+    - openstack-haproxy-neutron
+    - openstack-haproxy-mysqld
+    - openstack-haproxy
+    - ssl-keys-saving
+    - ssl-add-trust-chain
+
+- id: standalone-haproxy
+  type: group
+  role: [standalone-haproxy]
+  requires: [deploy_start]
+  required_for: [deploy_end, primary-controller]
+  parameters:
+    strategy:
+      type: parallel
+  tasks:
+    - hiera
+    - fuel_pkgs
+    - globals
+    - tools
+    - logging
+    - netconfig
+    - hosts
+    - cluster
+    - virtual_ips
+    - cluster-haproxy
+    - openstack-haproxy-ceilometer
+    - openstack-haproxy-nova
+    - openstack-haproxy-sahara
+    - openstack-haproxy-glance
+    - openstack-haproxy-heat
+    - openstack-haproxy-cinder
+    - openstack-haproxy-keystone
+    - openstack-haproxy-murano
+    - openstack-haproxy-horizon
+    - openstack-haproxy-stats
+    - openstack-haproxy-ironic
+    - openstack-haproxy-radosgw
+    - openstack-haproxy-swift
+    - openstack-haproxy-neutron
+    - openstack-haproxy-mysqld
+    - openstack-haproxy
+    - ssl-keys-saving
+    - ssl-add-trust-chain
+
+- id: standalone-haproxy-hiera
+  type: puppet
+  role: '*'
+  requires: [pre_hiera_config]
+  required_for: [pre_deployment_end]
+  parameters:
+    puppet_manifest: puppet/manifests/add_to_hiera.pp
+    puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 120
+
+- id: standalone-haproxy-mysqld-status
+  type: puppet
+  groups: [primary-standalone-haproxy, standalone-haproxy]
+  requires: [deploy_start, cluster-haproxy]
+  required_for: [openstack-haproxy, deploy_end]
+  parameters:
+    puppet_manifest: puppet/manifests/openstack-haproxy-mysqld-status.pp
+    puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 180
+
