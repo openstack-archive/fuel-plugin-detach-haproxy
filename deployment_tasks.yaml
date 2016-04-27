@@ -75,16 +75,29 @@
     - ssl-add-trust-chain
 
 - id: standalone-haproxy-hiera
+  version: 2.0.0
   type: puppet
-  role: '*'
-  requires: [pre_hiera_config]
-  required_for: [pre_deployment_end]
+  groups: ['/.*/']
+  requires: [hiera]
+  required_for: [standalone-haproxy-hiera-update]
   parameters:
     puppet_manifest: puppet/manifests/add_to_hiera.pp
     puppet_modules: puppet/modules:/etc/puppet/modules
     timeout: 120
 
+- id: standalone-haproxy-hiera-update
+  version: 2.0.0
+  type: puppet
+  groups: ['/.*/']
+  requires: [standalone-haproxy-hiera]
+  required_for: [globals]
+  parameters:
+    puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/hiera/hiera.pp
+    puppet_modules: /etc/puppet/modules
+    timeout: 360
+
 - id: standalone-haproxy-mysqld-status
+  version: 2.0.0
   type: puppet
   groups: [primary-standalone-haproxy, standalone-haproxy]
   requires: [deploy_start, cluster-haproxy]
