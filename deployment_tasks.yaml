@@ -109,3 +109,14 @@
     puppet_modules: puppet/modules:/etc/puppet/modules
     timeout: 180
 
+- id: standalone-haproxy-settings
+  version: 2.0.0
+  type: puppet
+  groups: [primary-standalone-haproxy, standalone-haproxy]
+  requires: [deploy_start, hosts]
+  required_for: [cluster, deploy_end]
+  parameters:
+    puppet_manifest: puppet/manifests/settings.pp
+    puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 180
+
