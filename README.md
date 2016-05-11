@@ -7,10 +7,10 @@ The main purpose of this plugin is to provide ability to deploy Load Balancer
 
 ## Compatibility
 
-| Plugin version | Fuel version |
-| -------------- | ------------ |
-| 1.x.x          | Fuel-8.x     |
-| 2.x.x          | Fuel-9.x     |
+| Plugin version | Branch        | Fuel version |
+| -------------- | ------------- | ------------ |
+| 1.x.x          | stable/8.0    | Fuel-8.x     |
+| 2.x.x          | stable/mitaka | Fuel-9.x     |
 
 ## How to build plugin
 
