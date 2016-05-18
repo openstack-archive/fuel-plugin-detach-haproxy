@@ -41,6 +41,7 @@ network_metadata:
 <% end -%>
 <% if @haproxy -%>
 corosync_roles: <%= @haproxy_roles %>
+colocate_haproxy: false
 <% end -%>
 run_ping_checker: false
 ")
