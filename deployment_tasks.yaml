@@ -12,11 +12,10 @@
     - globals
     - tools
     - logging
+    - hiera_default_route
     - netconfig
     - hosts
-    - primary-cluster
-    - virtual_ips
-    - cluster-haproxy
+    - primary-cluster-haproxy
     - openstack-haproxy-ceilometer
     - openstack-haproxy-nova
     - openstack-haproxy-sahara
@@ -51,10 +50,9 @@
     - globals
     - tools
     - logging
+    - hiera_default_route
     - netconfig
     - hosts
-    - cluster
-    - virtual_ips
     - cluster-haproxy
     - openstack-haproxy-ceilometer
     - openstack-haproxy-nova
@@ -114,9 +112,45 @@
   type: puppet
   groups: [primary-standalone-haproxy, standalone-haproxy]
   requires: [deploy_start, hosts]
-  required_for: [cluster, deploy_end]
+  required_for: [standalone-haproxy-cluster, deploy_end]
   parameters:
     puppet_manifest: puppet/manifests/settings.pp
     puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 180
+
+- id: primary-standalone-haproxy-cluster
+  type: puppet
+  version: 2.0.0
+  groups: [primary-standalone-haproxy]
+  required_for: [deploy_end, primary-cluster-haproxy]
+  requires: [hosts, firewall, deploy_start]
+  parameters:
+    puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/cluster/cluster.pp
+    puppet_modules: /etc/puppet/modules
+    timeout: 300
+
+- id: standalone-haproxy-cluster
+  type: puppet
+  version: 2.0.0
+  groups: [standalone-haproxy]
+  cross-depends:
+    - name: primary-standalone-haproxy-cluster
+      role: primary-standalone-haproxy
+  required_for: [deploy_end, cluster-haproxy]
+  requires: [hosts, firewall, deploy_start]
+  parameters:
+    puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/cluster/cluster.pp
+    puppet_modules: /etc/puppet/modules
+    timeout: 300
+
+- id: standalone-haproxy-virtual_ips
+  type: puppet
+  version: 2.0.0
+  groups: [primary-standalone-haproxy, standalone-haproxy]
+  required_for: [deploy_end, primary-cluster-haproxy, cluster-haproxy]
+  requires: [primary-standalone-haproxy-cluster, standalone-haproxy-cluster]
+  parameters:
+    puppet_manifest: /etc/puppet/modules/osnailyfacter/modular/virtual_ips/virtual_ips.pp
+    puppet_modules: /etc/puppet/modules
     timeout: 180
 
