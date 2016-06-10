@@ -12,11 +12,12 @@
     - globals
     - tools
     - logging
+    - hiera_default_route
     - netconfig
     - hosts
     - primary-cluster
     - virtual_ips
-    - cluster-haproxy
+    - primary-cluster-haproxy
     - openstack-haproxy-ceilometer
     - openstack-haproxy-nova
     - openstack-haproxy-sahara
@@ -51,6 +52,7 @@
     - globals
     - tools
     - logging
+    - hiera_default_route
     - netconfig
     - hosts
     - cluster
