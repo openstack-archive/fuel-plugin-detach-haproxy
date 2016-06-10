@@ -12,11 +12,12 @@
     - globals
     - tools
     - logging
+    - hiera_default_route
     - netconfig
     - hosts
     - primary-cluster
     - virtual_ips
-    - cluster-haproxy
+    - primary-cluster-haproxy
     - openstack-haproxy-ceilometer
     - openstack-haproxy-nova
     - openstack-haproxy-sahara
@@ -36,6 +37,7 @@
     - openstack-haproxy
     - ssl-keys-saving
     - ssl-add-trust-chain
+    - firewall
 
 - id: standalone-haproxy
   type: group
@@ -51,6 +53,7 @@
     - globals
     - tools
     - logging
+    - hiera_default_route
     - netconfig
     - hosts
     - cluster
@@ -75,6 +78,7 @@
     - openstack-haproxy
     - ssl-keys-saving
     - ssl-add-trust-chain
+    - firewall
 
 - id: standalone-haproxy-hiera
   version: 2.0.0
