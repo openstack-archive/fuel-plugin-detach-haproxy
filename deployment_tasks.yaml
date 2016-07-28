@@ -106,7 +106,7 @@
   version: 2.0.0
   type: puppet
   groups: [primary-standalone-haproxy, standalone-haproxy]
-  requires: [deploy_start, cluster-haproxy]
+  requires: [deploy_start, primary-cluster-haproxy, cluster-haproxy]
   required_for: [openstack-haproxy, deploy_end]
   parameters:
     puppet_manifest: puppet/manifests/openstack-haproxy-mysqld-status.pp
