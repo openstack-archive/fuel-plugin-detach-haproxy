@@ -14,6 +14,14 @@ if roles_include($haproxy_roles){
   $haproxy = false
 }
 
+# Since fuel-library saves database_vip in globals.yaml we need to calulate
+# this VIP value here in order to not conflict with detach-database plugin.
+$detach_database_plugin = hiera('detach-database', {})
+$detach_database_yaml = pick($detach_database_plugin['yaml_additional_config'], "{}")
+$detach_database_settings_hash = parseyaml($detach_database_yaml)
+$database_vip = pick($detach_database_settings_hash['remote_database'],
+                  try_get_value($vips, 'database/ipaddr', $mgmt_ip))
+
 file {"/etc/hiera/plugins/${plugin_name}.yaml":
   ensure  => file,
     content => inline_template("# Created by puppet, please do not edit manually
@@ -44,6 +52,7 @@ corosync_roles: <%= @haproxy_roles %>
 colocate_haproxy: false
 <% end -%>
 run_ping_checker: false
+colocate_haproxy: false
+database_vip: <%= @database_vip %>
 ")
 }
-
